@@ -4,6 +4,14 @@
 String BACKEND_URL = "http://883768b9.ngrok.io/ph_data";
 Process process;
 
+
+int analogPin = 0;     // potentiometer wiper (middle terminal) connected to analog pin 3
+
+                       // outside leads to ground and +5V
+
+int val = 0;           // variable to store the value read
+
+
 void setup() {
   // put your setup code here, to run once:
 
@@ -15,7 +23,8 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-    float ph = random(-700,700)/100;
+    float ph = analogRead(analogPin);
+    //float ph = -7 + (analogRead(analogPin)*(14/255));
     long timestamp = timeInEpoch();
     doCurl(ph, timestamp);
  
@@ -25,6 +34,8 @@ void loop() {
     char c = process.read();
     Serial.print(c);
   }
+
+  delay(3000);
 }
 
 unsigned long timeInEpoch() {
@@ -62,6 +73,4 @@ void doCurl(float value, long time) {
   
   process.runAsynchronously();
   Serial.println("tried");
-
-  delay(5000);
 }
